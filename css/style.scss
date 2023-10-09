@@ -1,4 +1,115 @@
+@import 'variables';
+@import 'reset';
 body {
   max-width: 1440px;
   margin: auto;
+}
+
+/* HEADER */
+
+.header {
+  background-image: url('../assets/images/banner.png');
+  width: auto;
+  height: 41rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__logo {
+    height: 7.8rem;
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 75%;
+    margin-bottom: 1rem;
+
+    img {
+      width: 13rem;
+      height: 1.6rem;
+    }
+  }
+
+  &__content {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    h2 {
+      display: flex;
+      align-items: flex-end;
+      height: 70%;
+      color: $primary-color;
+      font-family: $font-primary;
+      font-size: $font-xl;
+      font-weight: lighter;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+  }
+  &__searchbar {
+    height: 30%;
+    display: flex;
+    align-items: center;
+    padding-top: 1.8rem;
+
+    form {
+      .input__wrapper {
+        display: flex;
+        align-items: center;
+        position: relative;
+        input {
+          height: 4.5rem;
+          width: 59.6rem;
+          border-radius: 11px;
+          text-indent: 1.8rem;
+          font-size: $font-small;
+          color: $color-grey;
+          border: none;
+          &::placeholder {
+            opacity: 1;
+            transition: opacity 0.2s;
+            color: $color-grey;
+          }
+
+          &:focus {
+            outline: none;
+            padding-right: 5rem;
+            font-size: $font-small;
+            font-family: $font-secondary;
+            color: $color-grey;
+
+            &::placeholder {
+              opacity: 0;
+            }
+          }
+          &:hover {
+            padding-right: 5rem;
+          }
+        }
+
+        button {
+          text-indent: -9999px;
+          width: 51px;
+          height: 52px;
+          overflow: hidden;
+          background: $secondary-color url('../assets/images/search_icon.svg')
+            no-repeat center;
+          border-radius: 10px;
+          cursor: pointer;
+          position: absolute;
+          right: 1rem;
+          border: none;
+
+          &:hover {
+            background: $primary-color
+              url('../assets/images/search_icon_black.svg') no-repeat center;
+          }
+        }
+      }
+    }
+  }
 }
