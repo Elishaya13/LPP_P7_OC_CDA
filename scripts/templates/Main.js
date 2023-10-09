@@ -1,5 +1,6 @@
 import { fetchData } from '../utils/fetch.js';
 import { RecipeCard } from '../component/RecipeCard.js';
+import { FiltersWrapper } from './FiltersWrapper.js';
 
 export class Main {
   constructor() {}
@@ -13,6 +14,9 @@ export class Main {
 
     try {
       const recipesData = await fetchData();
+
+      const Filters = new FiltersWrapper($filterWrapper, recipesData);
+      Filters.createFiltersWrapper();
 
       recipesData.forEach((recipe) => {
         const Recipe = new RecipeCard(recipe);
