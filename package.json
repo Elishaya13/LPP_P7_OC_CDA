@@ -1,0 +1,23 @@
+{
+  "name": "lpp_p7_oc_cda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sass": "sass --watch css/style.scss:css/style.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elishaya13/LPP_P7_OC_CDA.git"
+  },
+  "author": "Angie Pons",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Elishaya13/LPP_P7_OC_CDA/issues"
+  },
+  "homepage": "https://github.com/Elishaya13/LPP_P7_OC_CDA#readme",
+  "devDependencies": {
+    "sass": "^1.69.0"
+  }
+}
