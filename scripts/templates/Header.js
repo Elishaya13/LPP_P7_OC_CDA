@@ -14,16 +14,17 @@ export class Header {
             </h2>
             <div class="header__searchbar">
               <form>
-              <label for="search"></label>
-              <div class="input__wrapper">
-                <input id="search" type="search" placeholder="Rechercher une recette, un ingrédient, ...">
-                <button type="submit">Search</button>
-              </div>
+                <label for="search"></label>
+                <div class="input__wrapper">
+                  <input id="search" type="search" placeholder="Rechercher une recette, un ingrédient, ...">
+                  <button type="submit">Search</button>
+                </div>
               </form>
             </div>
           </div>
        
   `;
+
     return $header;
   }
 }
