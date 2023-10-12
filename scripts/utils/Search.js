@@ -12,7 +12,7 @@ export class Search {
   }
 
   // Display the found recipes
-  displayRecipes(foundRecipes) {
+  displayRecipes(foundRecipes, searchTerm) {
     this.removeRecipes(this.$recipesWrapper);
 
     for (let recipe of foundRecipes) {
@@ -20,12 +20,18 @@ export class Search {
       const cardHTML = card.createRecipeCard();
       this.$recipesWrapper.innerHTML += cardHTML;
     }
+
+    if (foundRecipes.length === 0) {
+      const $noResult = `<div class="no-result"> <p>Aucune recette ne contient <b> "${searchTerm}" </b>, vous  pouvez chercher "tarte aux pommes", "poisson", etc.</p> </div>`;
+      this.$recipesWrapper.innerHTML = $noResult;
+    }
+
     return this.$recipesWrapper;
   }
 
   updateFilters(foundRecipes) {
     // Met a jour le contenu des filtres
-    console.log('metre a jour le contenu des filtres');
+    // console.log('metre a jour le contenu des filtres');
   }
   updateCounter(foundRecipes) {
     const $counter = document.querySelector('.filter__counter__span');
@@ -68,7 +74,7 @@ export class Search {
     const recipesList = this.recipesData;
     const recipesFound = this.getRecipeWithTerm(recipesList, searchTerm);
 
-    this.displayRecipes(recipesFound);
+    this.displayRecipes(recipesFound, searchTerm);
     this.updateCounter(recipesFound);
     this.updateFilters(recipesFound);
   }
