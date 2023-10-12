@@ -36,8 +36,9 @@ class Index {
     $searchInput.addEventListener('input', () => {
       const inputValue = $searchInput.value;
       if (inputValue.length >= 3) {
-        // lancer la fonction de recherche
         search.searchRecipe(inputValue);
+      } else {
+        search.searchRecipe('');
       }
     });
   }

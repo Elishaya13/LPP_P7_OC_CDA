@@ -11,7 +11,7 @@ export class Search {
     domElement.innerHTML = '';
   }
 
-  // Affichage des recettes trouvées
+  // Display the found recipes
   displayRecipes(foundRecipes) {
     this.removeRecipes(this.$recipesWrapper);
 
@@ -23,26 +23,38 @@ export class Search {
     return this.$recipesWrapper;
   }
 
-  updateFilters() {
+  updateFilters(foundRecipes) {
     // Met a jour le contenu des filtres
     console.log('metre a jour le contenu des filtres');
   }
+  updateCounter(foundRecipes) {
+    const $counter = document.querySelector('.filter__counter__span');
+    foundRecipes.length > 1
+      ? ($counter.textContent = `${foundRecipes.length} recettes `)
+      : ($counter.textContent = `${foundRecipes.length} recette `);
+  }
 
   getRecipeWithTerm(recipes, searchTerm) {
+    // Initialize an empty array to store matching recipes.
     let recipesFound = [];
     for (let recipe of recipes) {
+      // Convert the recipe's name and description to lowercase for case-insensitive matching.
       const nameLowerCase = recipe.name.toLowerCase();
       const descriptionLowerCase = recipe.description.toLowerCase();
 
+      // Check if the name or description contains the 'searchTerm'.
       if (
         nameLowerCase.includes(searchTerm) ||
         descriptionLowerCase.includes(searchTerm)
       ) {
         recipesFound.push(recipe);
       } else {
+        // If no match is found in name or description, loop through each ingredient in the recipe.
         for (let ingredient of recipe.ingredients) {
           const ingredientLowerCase = ingredient.ingredient.toLowerCase();
           if (ingredientLowerCase.includes(searchTerm)) {
+            // If a matching ingredient is found, add the recipe to 'recipesFound'.
+            // Then, break the loop to prevent duplicate additions for the same recipe.
             recipesFound.push(recipe);
             break;
           }
@@ -54,11 +66,10 @@ export class Search {
 
   searchRecipe(searchTerm) {
     const recipesList = this.recipesData;
-    const foundData = [];
-
     const recipesFound = this.getRecipeWithTerm(recipesList, searchTerm);
-    foundData.push(...recipesFound);
 
-    this.displayRecipes(foundData);
+    this.displayRecipes(recipesFound);
+    this.updateCounter(recipesFound);
+    this.updateFilters(recipesFound);
   }
 }
