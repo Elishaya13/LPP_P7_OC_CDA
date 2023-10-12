@@ -12,13 +12,18 @@ export function filterRecipeData(recipes) {
   const uniqueUstensils = new Set();
   const uniqueAppliances = new Set();
 
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   recipes.forEach((recipe) => {
     recipe.ingredients.forEach((ingredientData) => {
       uniqueIngredients.add(ingredientData.ingredient);
     });
 
     recipe.ustensils.forEach((ustensil) => {
-      uniqueUstensils.add(ustensil);
+      const ustensilCapitalize = capitalizeFirstLetter(ustensil);
+      uniqueUstensils.add(ustensilCapitalize);
     });
 
     uniqueAppliances.add(recipe.appliance);

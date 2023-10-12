@@ -1,3 +1,5 @@
+import { Filtertag } from './FilterTag.js';
+
 export class FilterButton {
   constructor(text, data) {
     this.text = text;
@@ -43,15 +45,41 @@ export class FilterButton {
     $search.classList.add('filter__dropdown-search');
     $dropdownContent.appendChild($search);
 
-    const arrayDatas = this.data;
-    arrayDatas.forEach((data) => {
+    const filterData = this.data;
+    // For each data create a div which contains the value of the data
+    filterData.forEach((data) => {
       const $item = document.createElement('div');
       $item.classList.add('search-item');
       $item.textContent = data;
       $dropdownContent.appendChild($item);
 
       $item.addEventListener('click', () => {
-        console.log('click ' + $item.textContent);
+        $item.classList.toggle('selected');
+        const name = $item.textContent.toLocaleLowerCase();
+        const className = name.replace(/\s+/g, '');
+
+        const isSelected = $item.classList.contains('selected');
+
+        if (isSelected) {
+          const $closeIcon = document.createElement('i');
+          $closeIcon.classList.add('fa-solid', 'fa-circle-xmark');
+          $item.appendChild($closeIcon);
+
+          const $tagsDomParent = document.querySelector('.tags__wrapper');
+          const Tag = new Filtertag($item.textContent);
+          const $tagElement = Tag.createTag();
+          $tagsDomParent.appendChild($tagElement);
+        } else {
+          const $closeIcon = $item.querySelector('.fa-circle-xmark');
+          const $tagElement = document.querySelector(
+            `.tags__wrapper-item-${className}`
+          );
+
+          if ($closeIcon) {
+            $closeIcon.remove();
+            $tagElement.remove();
+          }
+        }
       });
     });
 

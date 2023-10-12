@@ -1,19 +1,20 @@
 import { RecipeCard } from '../component/RecipeCard.js';
+import { FiltersWrapper } from '../templates/FiltersWrapper.js';
 
 export class Search {
   constructor(recipesData) {
     this.recipesData = recipesData;
     this.$recipesWrapper = document.querySelector('.recipes__wrapper');
-    this.$filterWrapper = document.querySelector('.filter__wrapper');
+    this.$filterWrapper = document.querySelector('.filters__wrapper');
   }
 
-  removeRecipes(domElement) {
+  removeDomElement(domElement) {
     domElement.innerHTML = '';
   }
 
   // Display the found recipes
   displayRecipes(foundRecipes, searchTerm) {
-    this.removeRecipes(this.$recipesWrapper);
+    this.removeDomElement(this.$recipesWrapper);
 
     for (let recipe of foundRecipes) {
       const card = new RecipeCard(recipe);
@@ -30,8 +31,9 @@ export class Search {
   }
 
   updateFilters(foundRecipes) {
-    // Met a jour le contenu des filtres
-    // console.log('metre a jour le contenu des filtres');
+    this.removeDomElement(this.$filterWrapper);
+    const filters = new FiltersWrapper(this.$filterWrapper, foundRecipes);
+    filters.createFiltersWrapper();
   }
   updateCounter(foundRecipes) {
     const $counter = document.querySelector('.filter__counter__span');

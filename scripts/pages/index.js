@@ -27,8 +27,10 @@ class Index {
   }
   async addMainContent() {
     const mainTemplate = new Main();
-    const { $filterWrapper, $recipesWrapper } = await mainTemplate.createMain();
-    this.$mainContent.appendChild($filterWrapper);
+    const { $filtersWrapper, $tagsWrapper, $recipesWrapper } =
+      await mainTemplate.createMain();
+    this.$mainContent.appendChild($filtersWrapper);
+    this.$mainContent.appendChild($tagsWrapper);
     this.$mainContent.appendChild($recipesWrapper);
 
     const search = new Search(recipesData);

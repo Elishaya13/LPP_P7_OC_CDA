@@ -6,8 +6,11 @@ export class Main {
   constructor() {}
 
   async createMain() {
-    const $filterWrapper = document.createElement('div');
-    $filterWrapper.classList.add('filter__wrapper');
+    const $filtersWrapper = document.createElement('div');
+    $filtersWrapper.classList.add('filters__wrapper');
+
+    const $tagsWrapper = document.createElement('div');
+    $tagsWrapper.classList.add('tags__wrapper');
 
     const $recipesWrapper = document.createElement('div');
     $recipesWrapper.classList.add('recipes__wrapper');
@@ -15,7 +18,7 @@ export class Main {
     try {
       const recipesData = await fetchData();
 
-      const Filters = new FiltersWrapper($filterWrapper, recipesData);
+      const Filters = new FiltersWrapper($filtersWrapper, recipesData);
       Filters.createFiltersWrapper();
 
       recipesData.forEach((recipe) => {
@@ -27,6 +30,6 @@ export class Main {
       console.error('An error occurred while fetching data:', error);
     }
 
-    return { $filterWrapper, $recipesWrapper };
+    return { $filtersWrapper, $tagsWrapper, $recipesWrapper };
   }
 }
