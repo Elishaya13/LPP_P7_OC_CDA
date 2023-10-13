@@ -1,7 +1,7 @@
 import { Header } from '../templates/Header.js';
 import { Main } from '../templates/Main.js';
 import { fetchData } from '../utils/fetch.js';
-import { Search } from '../utils/search.js';
+import { Search } from '../utils/Search.js';
 
 let recipesData = null;
 
