@@ -39,9 +39,10 @@ class Index {
       const inputValue = $searchInput.value;
       if (inputValue.length >= 3) {
         search.searchRecipe(inputValue);
-      } else {
-        search.searchRecipe('');
       }
+      // } else {
+      //   search.searchRecipe('');
+      // }
     });
   }
 }

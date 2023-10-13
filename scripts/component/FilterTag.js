@@ -3,6 +3,21 @@ export class Filtertag {
     this.name = value;
   }
 
+  handleRemoveTag($tagElement) {
+    const $selectedItems = document.querySelectorAll('.selected');
+    $selectedItems.forEach(($selected) => {
+      if ($selected.textContent === this.name) {
+        $selected.classList.remove('selected');
+
+        const $iconToRemove = $selected.querySelector('i');
+        if ($iconToRemove) {
+          $iconToRemove.remove();
+        }
+      }
+    });
+    $tagElement.remove();
+  }
+
   createTag() {
     const name = this.name.toLowerCase();
     const buttonClass = name.replace(/\s+/g, '');
@@ -18,6 +33,10 @@ export class Filtertag {
     $button.appendChild($icon);
 
     $tagElement.appendChild($button);
+
+    $icon.addEventListener('click', () => {
+      this.handleRemoveTag($tagElement);
+    });
     return $tagElement;
   }
 }

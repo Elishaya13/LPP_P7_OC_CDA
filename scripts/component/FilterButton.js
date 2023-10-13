@@ -1,8 +1,10 @@
+import { Search } from '../utils/Search.js';
 import { Filtertag } from './FilterTag.js';
 
 export class FilterButton {
-  constructor(text, data) {
+  constructor(text, dataFilter, data) {
     this.text = text;
+    this.dataFilter = dataFilter;
     this.data = data;
   }
 
@@ -21,6 +23,39 @@ export class FilterButton {
     $dropdownContent.style.display = $dropdownContent.classList.contains('show')
       ? 'block'
       : 'none';
+  }
+
+  handleItemClick($item) {
+    $item.classList.toggle('selected');
+    const name = $item.textContent.toLowerCase();
+    const className = name.replace(/\s+/g, '');
+
+    const isSelected = $item.classList.contains('selected');
+
+    if (isSelected) {
+      const $closeIcon = document.createElement('i');
+      $closeIcon.classList.add('fa-solid', 'fa-circle-xmark');
+      $item.appendChild($closeIcon);
+
+      const $tagsDomParent = document.querySelector('.tags__wrapper');
+      const Tag = new Filtertag($item.textContent);
+      const $tagElement = Tag.createTag();
+      console.log('function filtre sur ' + $item.textContent);
+      $tagsDomParent.appendChild($tagElement);
+
+      const search = new Search(this.data);
+      search.searchRecipeWithTag($item.textContent);
+    } else {
+      const $closeIcon = $item.querySelector('.fa-circle-xmark');
+      const $tagElement = document.querySelector(
+        `.tags__wrapper-item-${className}`
+      );
+
+      if ($closeIcon) {
+        $closeIcon.remove();
+        $tagElement.remove();
+      }
+    }
   }
 
   createFilterButton() {
@@ -45,42 +80,15 @@ export class FilterButton {
     $search.classList.add('filter__dropdown-search');
     $dropdownContent.appendChild($search);
 
-    const filterData = this.data;
-    // For each data create a div which contains the value of the data
+    const filterData = this.dataFilter;
+
     filterData.forEach((data) => {
       const $item = document.createElement('div');
       $item.classList.add('search-item');
       $item.textContent = data;
       $dropdownContent.appendChild($item);
 
-      $item.addEventListener('click', () => {
-        $item.classList.toggle('selected');
-        const name = $item.textContent.toLocaleLowerCase();
-        const className = name.replace(/\s+/g, '');
-
-        const isSelected = $item.classList.contains('selected');
-
-        if (isSelected) {
-          const $closeIcon = document.createElement('i');
-          $closeIcon.classList.add('fa-solid', 'fa-circle-xmark');
-          $item.appendChild($closeIcon);
-
-          const $tagsDomParent = document.querySelector('.tags__wrapper');
-          const Tag = new Filtertag($item.textContent);
-          const $tagElement = Tag.createTag();
-          $tagsDomParent.appendChild($tagElement);
-        } else {
-          const $closeIcon = $item.querySelector('.fa-circle-xmark');
-          const $tagElement = document.querySelector(
-            `.tags__wrapper-item-${className}`
-          );
-
-          if ($closeIcon) {
-            $closeIcon.remove();
-            $tagElement.remove();
-          }
-        }
-      });
+      $item.addEventListener('click', () => this.handleItemClick($item));
     });
 
     $button.addEventListener('click', () => this.handleClick($button));

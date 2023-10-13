@@ -6,11 +6,14 @@ export class Search {
     this.recipesData = recipesData;
     this.$recipesWrapper = document.querySelector('.recipes__wrapper');
     this.$filterWrapper = document.querySelector('.filters__wrapper');
+    this.recipesFilter = [];
   }
 
   removeDomElement(domElement) {
     domElement.innerHTML = '';
   }
+
+  removeTagFilter(searchTag) {}
 
   // Display the found recipes
   displayRecipes(foundRecipes, searchTerm) {
@@ -71,13 +74,61 @@ export class Search {
     }
     return recipesFound;
   }
+  getRecipeWithTag(recipes, searchTag) {
+    let recipesFound = [];
+    for (let recipe of recipes) {
+      for (let ingredient of recipe.ingredients) {
+        const item = ingredient.ingredient;
+        if (item.includes(searchTag)) {
+          recipesFound.push(recipe);
+        }
+      }
+
+      for (let ustensil of recipe.ustensils) {
+        const searchTagToLowerCase = searchTag.toLowerCase();
+        if (ustensil.includes(searchTagToLowerCase)) {
+          recipesFound.push(recipe);
+        }
+      }
+      if (recipe.appliance.includes(searchTag)) {
+        recipesFound.push(recipe);
+      }
+    }
+
+    return recipesFound;
+  }
+  addInArray(recipesFound) {
+    for (let recipe of recipesFound) {
+      if (!this.recipesFilter.includes(recipe)) {
+        this.recipesFilter.push(recipe);
+      }
+    }
+  }
 
   searchRecipe(searchTerm) {
     const recipesList = this.recipesData;
     const recipesFound = this.getRecipeWithTerm(recipesList, searchTerm);
+    this.recipesFilter = [];
+    this.addInArray(recipesFound);
 
     this.displayRecipes(recipesFound, searchTerm);
     this.updateCounter(recipesFound);
     this.updateFilters(recipesFound);
+
+    console.log(this.recipesFilter);
+  }
+
+  searchRecipeWithTag(searchTag) {
+    const recipesList = this.recipesData;
+    const recipesFound = this.getRecipeWithTag(recipesList, searchTag);
+    this.addInArray(recipesFound);
+
+    this.displayRecipes(this.recipesFilter, searchTag);
+    this.updateCounter(this.recipesFilter);
+    this.updateFilters(this.recipesFilter);
+
+    //this.removeTagFilter(searchTag);
+
+    console.log(this.recipesFilter);
   }
 }

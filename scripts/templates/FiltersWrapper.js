@@ -13,15 +13,18 @@ export class FiltersWrapper {
 
     const ingredientsButton = new FilterButton(
       'Ingrédients',
-      filteredData.ingredients
+      filteredData.ingredients,
+      this.data
     );
     const appliancesButton = new FilterButton(
       'Appareils',
-      filteredData.appliances
+      filteredData.appliances,
+      this.data
     );
     const ustensilsButton = new FilterButton(
       'Ustensiles',
-      filteredData.ustensils
+      filteredData.ustensils,
+      this.data
     );
 
     const $ingredientsFilter = ingredientsButton.createFilterButton();
