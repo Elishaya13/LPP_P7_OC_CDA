@@ -28,7 +28,7 @@ export class RecipeCard {
     const $card = `
       <div class="recipe__card">
         <div class="recipe__card__header">
-          <img class="recipe__card__header-img" src='../../assets/recipes/${this.image}'></img>
+          <img class="recipe__card__header-img" src='assets/recipes/${this.image}'></img>
         </div>
         <span class="recipe__card__header-time">${this.time}min</span>
         <div class="recipe__card__content">

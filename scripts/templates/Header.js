@@ -5,7 +5,7 @@ export class Header {
     const $header = `
   
           <div class="header__logo">
-              <img src="../assets/images/logo.png" alt="logo">
+              <img src="assets/images/logo.png" alt="logo">
           </div>
           <div class="header__content"> 
             <h2>
