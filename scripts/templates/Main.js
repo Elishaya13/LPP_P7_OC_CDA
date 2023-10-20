@@ -1,9 +1,10 @@
-import { fetchData } from '../utils/fetch.js';
-import { RecipeCard } from '../component/RecipeCard.js';
-import { FiltersWrapper } from './FiltersWrapper.js';
+import { Display } from '../utils/Display.js';
 
 export class Main {
-  constructor() {}
+  constructor(recipesData, searchFilter) {
+    this.recipesData = recipesData;
+    this.searchFilter = searchFilter;
+  }
 
   async createMain() {
     const $filtersWrapper = document.createElement('div');
@@ -15,20 +16,15 @@ export class Main {
     const $recipesWrapper = document.createElement('div');
     $recipesWrapper.classList.add('recipes__wrapper');
 
-    try {
-      const recipesData = await fetchData();
+    const display = new Display(this.recipesData, this.searchFilter);
 
-      const Filters = new FiltersWrapper($filtersWrapper, recipesData);
-      Filters.createFiltersWrapper();
+    display.displayMenuFilter(
+      $filtersWrapper,
+      this.recipesData,
+      this.searchFilter
+    );
 
-      recipesData.forEach((recipe) => {
-        const Recipe = new RecipeCard(recipe);
-        const recipeCardHtml = Recipe.createRecipeCard();
-        $recipesWrapper.innerHTML += recipeCardHtml;
-      });
-    } catch (error) {
-      console.error('An error occurred while fetching data:', error);
-    }
+    display.displayRecipes($recipesWrapper, this.recipesData);
 
     return { $filtersWrapper, $tagsWrapper, $recipesWrapper };
   }

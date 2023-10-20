@@ -1,11 +1,18 @@
-import { Search } from '../utils/Search.js';
+import { Display } from '../utils/Display.js';
+//import { Search } from '../utils/Search.js';
+import {
+  SearchFilter,
+  recipesFiltered,
+  tagsList,
+} from '../utils/SearchFilter.js';
 import { Filtertag } from './FilterTag.js';
 
 export class FilterButton {
-  constructor(text, dataFilter, data) {
+  constructor(text, dataFilter, data, searchFilter) {
     this.text = text;
     this.dataFilter = dataFilter;
     this.data = data;
+    this.searchFilter = searchFilter;
   }
 
   handleClick(buttonElement) {
@@ -43,8 +50,18 @@ export class FilterButton {
       console.log('function filtre sur ' + $item.textContent);
       $tagsDomParent.appendChild($tagElement);
 
-      const search = new Search(this.data);
-      search.searchRecipeWithTag($item.textContent);
+      tagsList.push($item.textContent);
+      const search = new SearchFilter(this.data);
+      search.search('', tagsList);
+
+      //DOM
+      const $recipesWrapper = document.querySelector('.recipes__wrapper');
+      const $filtersWrapper = document.querySelector('.filters__wrapper');
+
+      const display = new Display(this.searchFilter);
+      display.displayRecipes($recipesWrapper, recipesFiltered);
+      display.displayMenuFilter($filtersWrapper, recipesFiltered);
+      display.displayCounter(recipesFiltered);
     } else {
       const $closeIcon = $item.querySelector('.fa-circle-xmark');
       const $tagElement = document.querySelector(
