@@ -5,8 +5,6 @@ import { fetchData } from '../utils/fetch.js';
 import { recipesFiltered, SearchFilter } from '../utils/SearchFilter.js';
 import { tagsList } from '../utils/SearchFilter.js';
 
-//let recipesData = null;
-
 class Index {
   constructor() {
     this.$headerWrapper = document.getElementById('header_wrapper');
@@ -38,38 +36,25 @@ class Index {
     this.$mainContent.appendChild($tagsWrapper);
     this.$mainContent.appendChild($recipesWrapper);
 
-    //const search = new Search(this.recipesData);
-
-    //instancie la class avec toutes les data
-    // const searchFilter = new SearchFilter(this.recipesData);
     const $searchInput = document.getElementById('search');
+
     $searchInput.addEventListener('input', () => {
       const display = new Display(this.searchFilter);
       const inputValue = $searchInput.value;
-      let recipesToDisplay = this.recipesData;
+      let recipesToDisplay = [];
 
       if (inputValue.length >= 3) {
         this.searchFilter.search(inputValue, tagsList);
         recipesToDisplay = recipesFiltered;
       } else {
         this.searchFilter.search('', tagsList);
+        recipesToDisplay = recipesFiltered;
       }
 
       display.displayRecipes($recipesWrapper, recipesToDisplay);
       display.displayMenuFilter($filtersWrapper, recipesToDisplay);
       display.displayCounter(recipesToDisplay);
     });
-
-    // const $searchInput = document.getElementById('search');
-    // $searchInput.addEventListener('input', () => {
-    //   const inputValue = $searchInput.value;
-    //   if (inputValue.length >= 3) {
-    //     search.searchRecipe(inputValue);
-    //   }
-    // } else {
-    //   search.searchRecipe('');
-    // }
-    // });
   }
 }
 const index = new Index();

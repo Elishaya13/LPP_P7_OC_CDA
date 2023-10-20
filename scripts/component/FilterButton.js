@@ -4,6 +4,7 @@ import {
   SearchFilter,
   recipesFiltered,
   tagsList,
+  termValue,
 } from '../utils/SearchFilter.js';
 import { Filtertag } from './FilterTag.js';
 
@@ -52,7 +53,7 @@ export class FilterButton {
 
       tagsList.push($item.textContent);
       const search = new SearchFilter(this.data);
-      search.search('', tagsList);
+      search.search(termValue, tagsList);
 
       //DOM
       const $recipesWrapper = document.querySelector('.recipes__wrapper');

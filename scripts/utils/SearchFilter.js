@@ -1,5 +1,8 @@
 export let recipesFiltered = []; //Le tableau des objets filtrés
 export let tagsList = []; // le tableau des tags selectionné
+export let termValue = '';
+let recipesWithTag = [];
+let recipesWithTerms = [];
 
 export class SearchFilter {
   //Initialise la classe avec toutes les data (50 recettes)
@@ -12,10 +15,10 @@ export class SearchFilter {
    * @param {*} searchTerm resultat de la value dun'input searchbar
    * @returns
    */
-  filterWithTerms(recipes, searchTerm) {
+  filterWithTerms(recipesList, searchTerm) {
     let recipesFound = [];
 
-    for (let recipe of recipes) {
+    for (let recipe of recipesList) {
       // Convert the recipe's name and description to lowercase for case-insensitive matching.
       const nameLowerCase = recipe.name.toLowerCase();
       const descriptionLowerCase = recipe.description.toLowerCase();
@@ -39,7 +42,13 @@ export class SearchFilter {
         }
       }
     }
-    console.log('recipes found dans filter terms', recipesFound);
+    if (searchTerm.length < 3) {
+      recipesFound = [];
+      recipesFiltered = [];
+    }
+
+    recipesWithTerms = recipesFound;
+
     return recipesFound;
   }
 
@@ -52,83 +61,99 @@ export class SearchFilter {
     let recipesMatchWithTerm = [];
   }
 
-  filterWithTags(searchTags) {
-    console.log('lancement filtre par tag sur: ', searchTags);
+  filterWithTags(recipesList, searchTags) {
     let recipesFound = [];
     let recipesToFilter = [];
 
     if (recipesFiltered.length > 0) {
       recipesToFilter = recipesFiltered;
     } else {
-      recipesToFilter = this.fullRecipesData;
+      recipesToFilter = recipesList;
     }
 
-    for (let recipe of recipesToFilter) {
-      let allTagsFound = true; // Indicateur pour vérifier si tous les tags sont présents
+    if (searchTags.length > 0) {
+      for (let recipe of recipesToFilter) {
+        let allTagsFound = true; // Indicateur pour vérifier si tous les tags sont présents
 
-      for (let searchTag of searchTags) {
-        let tagFoundInRecipe = false; // Indicateur pour vérifier si le tag est présent dans la recette
+        for (let searchTag of searchTags) {
+          let tagFoundInRecipe = false; // Indicateur pour vérifier si le tag est présent dans la recette
 
-        for (let ingredient of recipe.ingredients) {
-          const item = ingredient.ingredient;
-          if (item.includes(searchTag)) {
+          for (let ingredient of recipe.ingredients) {
+            const item = ingredient.ingredient;
+            if (item.includes(searchTag)) {
+              tagFoundInRecipe = true;
+              break; // Sort de la boucle dès qu'un ingrédient est trouvé
+            }
+          }
+
+          if (recipe.ustensils.includes(searchTag)) {
             tagFoundInRecipe = true;
-            break; // Sort de la boucle dès qu'un ingrédient est trouvé
+          }
+
+          if (recipe.appliance.includes(searchTag)) {
+            tagFoundInRecipe = true;
+          }
+
+          if (!tagFoundInRecipe) {
+            // Si le tag n'est pas trouvé dans une catégorie marquer comme false
+            allTagsFound = false;
+            break;
           }
         }
 
-        if (recipe.ustensils.includes(searchTag)) {
-          tagFoundInRecipe = true;
+        if (allTagsFound) {
+          recipesFound.push(recipe);
         }
-
-        if (recipe.appliance.includes(searchTag)) {
-          tagFoundInRecipe = true;
-        }
-
-        if (!tagFoundInRecipe) {
-          // Si le tag n'est pas trouvé dans une catégorie marquer comme false
-          allTagsFound = false;
-          break;
-        }
-      }
-
-      if (allTagsFound) {
-        recipesFound.push(recipe);
       }
     }
 
-    console.log(recipesFound);
+    recipesWithTag = recipesFound;
+
     return recipesFound;
   }
 
-  // FONCTION PARENTE
-  // searchTags = ["blender", "sucre"]
-  //searchTerms = "cho" , "choco" , "chou" // value d' input
-
   search(searchTerms, searchTags) {
-    console.log('searchterm', searchTerms);
+    termValue = searchTerms;
 
-    console.log('searchtag', searchTags);
+    let recipesToDisplay = [];
 
-    let recipesToFilter = this.fullRecipesData;
-    console.log('taglist', tagsList);
+    const filteredBytags = this.filterWithTags(
+      this.fullRecipesData,
+      searchTags
+    );
 
-    // si le terme recherché est superieur a 3 lettres
-    if (searchTerms.length >= 3) {
-      //recupere le tableau des recettes par termes
-      const filteredByTerm = this.filterWithTerms(recipesToFilter, searchTerms);
-      recipesToFilter = filteredByTerm;
-    } else {
-      console.log('else pas searchterm');
-      // sinon on utilise la methode filterWithTags pour filtrer sur les tags
-      const filteredByTags = this.filterWithTags(tagsList);
-      console.log(tagsList);
-      console.log(filteredByTags);
-      recipesToFilter = filteredByTags;
+    const filteredByTerms = this.filterWithTerms(
+      this.fullRecipesData,
+      searchTerms
+    );
+
+    //si les deux tableau ont des recettes
+    if (recipesWithTag.length > 0 && recipesWithTerms.length > 0) {
+      //match
+      console.log('retourn tableau match des deux tableaux');
+      recipesFiltered = [];
+      const recipesWithMatchingID = recipesWithTerms.filter((tagRecipe) =>
+        recipesWithTag.some((termRecipe) => termRecipe.id === tagRecipe.id)
+      );
+      recipesToDisplay = recipesWithMatchingID;
     }
 
-    recipesFiltered = recipesToFilter;
-    console.log('recipe to filter', recipesToFilter);
-    console.log('recipe filtered', recipesFiltered);
+    // s'il n'y a que le tableau de tag qui a des recettes
+    if (recipesWithTag.length > 0 && recipesWithTerms.length === 0) {
+      console.log('retourne tableau correspondance que des tags');
+      recipesFiltered = [];
+      recipesWithTag = this.filterWithTags(this.fullRecipesData, tagsList);
+
+      recipesToDisplay = recipesWithTag;
+    }
+
+    if (recipesWithTag.length === 0 && recipesWithTerms.length > 0) {
+      console.log('retourne le tableau correspondance que de termes');
+      recipesToDisplay = filteredByTerms;
+    }
+
+    recipesFiltered = recipesToDisplay;
+    console.log('recipeFiltered[]', recipesFiltered);
+    console.log('a afficher', recipesToDisplay);
   }
 }

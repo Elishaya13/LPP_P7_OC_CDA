@@ -1,6 +1,5 @@
 import { RecipeCard } from '../component/RecipeCard.js';
 import { FiltersWrapper } from '../templates/FiltersWrapper.js';
-import { recipesFiltered } from './SearchFilter.js';
 
 export class Display {
   constructor(searchFilter) {
@@ -9,7 +8,8 @@ export class Display {
 
   displayRecipes(domElement, recipesList) {
     console.log('construit la vue des recettes');
-    console.log('recipes filtered recup dans display', recipesFiltered);
+    // console.log('recipes filtered recup dans display', recipesFiltered);
+    // console.log('recettes utilisées pour la vue recettes', recipesList);
     domElement = domElement ?? document.querySelector('.recipes__wrapper');
 
     domElement.innerHTML = '';
@@ -31,7 +31,7 @@ export class Display {
       ? ($counter.textContent = `${recipesFiltered.length} recettes `)
       : ($counter.textContent = `${recipesFiltered.length} recette `);
 
-    console.log('met a jour le compteur de recette');
+    //console.log('met a jour le compteur de recette');
   }
 
   displayMenuFilter(domElement, recipesList, search) {
@@ -41,6 +41,6 @@ export class Display {
 
     filters.createFiltersWrapper();
 
-    console.log('met a jour le contenu des menu');
+    //console.log('met a jour le contenu des menu');
   }
 }
