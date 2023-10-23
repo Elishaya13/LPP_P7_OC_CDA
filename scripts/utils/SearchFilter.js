@@ -45,6 +45,8 @@ export class SearchFilter {
     if (searchTerm.length < 3) {
       recipesFound = [];
       recipesFiltered = [];
+      console.log('moins de trois', recipesFiltered);
+      //this.filterWithTags(tagsList)
     }
 
     recipesWithTerms = recipesFound;
@@ -147,12 +149,19 @@ export class SearchFilter {
       recipesFiltered = [];
       recipesWithTag = this.filterWithTags(this.fullRecipesData, tagsList);
 
-      recipesToDisplay = filteredBytags;
+      recipesToDisplay = recipesWithTag;
+      //recipesToDisplay = filteredBytags;
     }
 
     if (recipesWithTag.length === 0 && recipesWithTerms.length > 0) {
       console.log('retourne le tableau correspondance que de termes');
+      //recipesToDisplay = recipesWithTerms;
       recipesToDisplay = filteredByTerms;
+    }
+
+    if (recipesWithTag.length === 0 && recipesWithTerms.length === 0) {
+      console.log('retourne tout le tableau');
+      recipesToDisplay = this.fullRecipesData;
     }
 
     recipesFiltered = recipesToDisplay;
