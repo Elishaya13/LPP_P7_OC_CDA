@@ -86,8 +86,11 @@ export class SearchFilter {
             }
           }
 
-          if (recipe.ustensils.includes(searchTag)) {
-            tagFoundInRecipe = true;
+          for (let ustensil of recipe.ustensils) {
+            const searchTagsToLowerCase = searchTag.toLowerCase();
+            if (ustensil.includes(searchTagsToLowerCase)) {
+              tagFoundInRecipe = true;
+            }
           }
 
           if (recipe.appliance.includes(searchTag)) {
@@ -144,7 +147,7 @@ export class SearchFilter {
       recipesFiltered = [];
       recipesWithTag = this.filterWithTags(this.fullRecipesData, tagsList);
 
-      recipesToDisplay = recipesWithTag;
+      recipesToDisplay = filteredBytags;
     }
 
     if (recipesWithTag.length === 0 && recipesWithTerms.length > 0) {
@@ -153,6 +156,7 @@ export class SearchFilter {
     }
 
     recipesFiltered = recipesToDisplay;
+
     console.log('recipeFiltered[]', recipesFiltered);
     console.log('a afficher', recipesToDisplay);
   }
