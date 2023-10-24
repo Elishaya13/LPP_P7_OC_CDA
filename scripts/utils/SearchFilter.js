@@ -1,3 +1,5 @@
+import { displayNoResult } from './display.js';
+
 export let recipesFiltered = []; //Le tableau des objets filtrés
 export let tagsList = []; // le tableau des tags selectionné
 export let termValue = '';
@@ -45,6 +47,10 @@ export class SearchFilter {
     if (searchTerm.length < 3) {
       recipesFound = [];
       recipesFiltered = [];
+    }
+    if (recipesFound.length === 0 && searchTerm.length >= 3) {
+      // Aucune recette trouvée et le terme de recherche a au moins 3 caractères
+      displayNoResult(searchTerm);
     }
 
     recipesWithTerms = recipesFound;

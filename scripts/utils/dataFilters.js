@@ -46,6 +46,5 @@ export function filterMenuWithTerms(dataMenu, searchTerm) {
       dataFound.push(data);
     }
   }
-  console.log('data trouvés', dataFound);
   return dataFound;
 }

@@ -17,10 +17,13 @@ export function displayRecipes(domElement, recipesList) {
 export function displayCounter(recipesFiltered) {
   const $counter = document.querySelector('.filter__counter__span');
 
-  // 's' or not
-  recipesFiltered.length > 1
-    ? ($counter.textContent = `${recipesFiltered.length} recettes `)
-    : ($counter.textContent = `${recipesFiltered.length} recette `);
+  const countText =
+    recipesFiltered.length >= 10
+      ? `${recipesFiltered.length}`
+      : `0${recipesFiltered.length}`;
+
+  const recipeText = recipesFiltered.length > 1 ? 'recettes' : 'recette';
+  $counter.textContent = `${countText} ${recipeText}`;
 }
 
 export function displayMenuFilter(domElement, recipesList, search) {
@@ -29,4 +32,15 @@ export function displayMenuFilter(domElement, recipesList, search) {
   const filters = new FiltersWrapper(domElement, recipesList, search);
 
   filters.createFiltersWrapper();
+}
+
+export function displayNoResult(searchTerm) {
+  const parentElt = document.querySelector('.header__searchbar');
+  const noResultsDiv = document.createElement('div');
+  noResultsDiv.classList.add('no-result');
+  const textNoResult = document.createElement('p');
+  textNoResult.innerText = `« Aucune recette ne contient ‘${searchTerm}’ vous pouvez chercher «
+  tarte aux pommes », « poisson », etc.`;
+  noResultsDiv.appendChild(textNoResult);
+  parentElt.appendChild(noResultsDiv);
 }
