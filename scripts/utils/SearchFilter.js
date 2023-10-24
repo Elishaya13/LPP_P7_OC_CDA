@@ -59,14 +59,12 @@ export class SearchFilter {
   }
 
   filterWithTags(recipesList, searchTags) {
-    console.log(recipesList);
     let recipesFound = [];
     let recipesToFilter = [];
 
     if (recipesFiltered.length > 0) {
       recipesToFilter = recipesList;
     } else {
-      console.log('else recipelist');
       recipesToFilter = recipesList;
     }
 
@@ -162,8 +160,5 @@ export class SearchFilter {
     }
 
     recipesFiltered = recipesToDisplay;
-
-    console.log('recipeFiltered[]', recipesFiltered);
-    console.log('a afficher', recipesToDisplay);
   }
 }

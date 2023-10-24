@@ -29,7 +29,6 @@ export class Filtertag {
 
     if (indexToRemove !== -1) {
       tagsList.splice(indexToRemove, 1);
-      console.log(`Elément "${term}" supprimé de tagsList`);
     }
   }
 
@@ -55,7 +54,7 @@ export class Filtertag {
 
       const input = document.getElementById('search');
       const inputValue = input.value;
-      console.log('avant update', tagsList);
+
       updateSearch(inputValue, tagsList);
       updateView();
     });

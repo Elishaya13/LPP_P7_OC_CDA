@@ -94,7 +94,6 @@ export class FilterButton {
 
       for (let tag of tagsList) {
         if (tag === menu) {
-          console.log('tag trouvé', tag, menu);
           $item.classList.add('selected');
 
           if (!existingCloseIcon) {
