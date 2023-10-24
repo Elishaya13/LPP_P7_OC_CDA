@@ -45,8 +45,6 @@ export class SearchFilter {
     if (searchTerm.length < 3) {
       recipesFound = [];
       recipesFiltered = [];
-      console.log('moins de trois', recipesFiltered);
-      //this.filterWithTags(tagsList)
     }
 
     recipesWithTerms = recipesFound;
@@ -54,22 +52,15 @@ export class SearchFilter {
     return recipesFound;
   }
 
-  filterWithTermInMenu(dataMenu, searchterm) {
-    // Recois un tableau de datas filtrées des recettes dans le menu par: ou ingredients, ou appareils ou ustensils
-    // Recois le terme saisie (3 lettres min) dans l'input et cherche la correspondance dans la list des datas du menu
-    // Retourne un tableau correspondant
-    // Met a jour la vue de ce menu avec les nouveau mots
-    let recipesFound = [];
-    let recipesMatchWithTerm = [];
-  }
-
   filterWithTags(recipesList, searchTags) {
+    console.log(recipesList);
     let recipesFound = [];
     let recipesToFilter = [];
 
     if (recipesFiltered.length > 0) {
-      recipesToFilter = recipesFiltered;
+      recipesToFilter = recipesList;
     } else {
+      console.log('else recipelist');
       recipesToFilter = recipesList;
     }
 
@@ -120,23 +111,31 @@ export class SearchFilter {
   search(searchTerms, searchTags) {
     termValue = searchTerms;
 
+    const fullRecipes = this.fullRecipesData;
+
     let recipesToDisplay = [];
 
-    const filteredBytags = this.filterWithTags(
+    const filteredWithTags = this.filterWithTags(
       this.fullRecipesData,
       searchTags
     );
 
     const filteredByTerms = this.filterWithTerms(
       this.fullRecipesData,
-      searchTerms
+      termValue
     );
+
+    if (recipesWithTag.length === 0 && recipesWithTerms.length === 0) {
+      console.log('retourne tout le tableau');
+      recipesToDisplay = fullRecipes;
+    }
 
     //si les deux tableau ont des recettes
     if (recipesWithTag.length > 0 && recipesWithTerms.length > 0) {
-      //match
       console.log('retourn tableau match des deux tableaux');
       recipesFiltered = [];
+      recipesWithTag = filteredWithTags;
+
       const recipesWithMatchingID = recipesWithTerms.filter((tagRecipe) =>
         recipesWithTag.some((termRecipe) => termRecipe.id === tagRecipe.id)
       );
@@ -148,20 +147,12 @@ export class SearchFilter {
       console.log('retourne tableau correspondance que des tags');
       recipesFiltered = [];
       recipesWithTag = this.filterWithTags(this.fullRecipesData, tagsList);
-
       recipesToDisplay = recipesWithTag;
-      //recipesToDisplay = filteredBytags;
     }
 
     if (recipesWithTag.length === 0 && recipesWithTerms.length > 0) {
       console.log('retourne le tableau correspondance que de termes');
-      //recipesToDisplay = recipesWithTerms;
       recipesToDisplay = filteredByTerms;
-    }
-
-    if (recipesWithTag.length === 0 && recipesWithTerms.length === 0) {
-      console.log('retourne tout le tableau');
-      recipesToDisplay = this.fullRecipesData;
     }
 
     recipesFiltered = recipesToDisplay;

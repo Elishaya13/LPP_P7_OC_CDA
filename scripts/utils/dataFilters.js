@@ -35,3 +35,17 @@ export function filterRecipeData(recipes) {
     appliances: Array.from(uniqueAppliances),
   };
 }
+
+export function filterMenuWithTerms(dataMenu, searchTerm) {
+  let dataFound = [];
+
+  for (let data of dataMenu) {
+    const searchTermToLowerCase = searchTerm.toLowerCase();
+    const dataToLowerCase = data.toLowerCase();
+    if (dataToLowerCase.includes(searchTermToLowerCase)) {
+      dataFound.push(data);
+    }
+  }
+  console.log('data trouvés', dataFound);
+  return dataFound;
+}

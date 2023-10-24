@@ -1,46 +1,38 @@
 import { RecipeCard } from '../component/RecipeCard.js';
 import { FiltersWrapper } from '../templates/FiltersWrapper.js';
 
-export class Display {
-  constructor(searchFilter) {
-    this.searchFilter = searchFilter;
+export function displayRecipes(domElement, recipesList) {
+  console.log('construit la vue des recettes');
+  domElement = domElement ?? document.querySelector('.recipes__wrapper');
+
+  domElement.innerHTML = '';
+
+  for (let recipe of recipesList) {
+    const card = new RecipeCard(recipe).createRecipeCard();
+
+    domElement.innerHTML += card;
   }
+  return domElement;
+}
 
-  displayRecipes(domElement, recipesList) {
-    console.log('construit la vue des recettes');
-    // console.log('recipes filtered recup dans display', recipesFiltered);
-    // console.log('recettes utilisées pour la vue recettes', recipesList);
-    domElement = domElement ?? document.querySelector('.recipes__wrapper');
+export function displayCounter(recipesFiltered) {
+  //recupere l'element du Dom
+  const $counter = document.querySelector('.filter__counter__span');
 
-    domElement.innerHTML = '';
+  // 's' or not
+  recipesFiltered.length > 1
+    ? ($counter.textContent = `${recipesFiltered.length} recettes `)
+    : ($counter.textContent = `${recipesFiltered.length} recette `);
 
-    for (let recipe of recipesList) {
-      const card = new RecipeCard(recipe).createRecipeCard();
+  //console.log('met a jour le compteur de recette');
+}
 
-      domElement.innerHTML += card;
-    }
-    return domElement;
-  }
+export function displayMenuFilter(domElement, recipesList, search) {
+  domElement.innerHTML = '';
 
-  displayCounter(recipesFiltered) {
-    //recupere l'element du Dom
-    const $counter = document.querySelector('.filter__counter__span');
+  const filters = new FiltersWrapper(domElement, recipesList, search);
 
-    // 's' or not
-    recipesFiltered.length > 1
-      ? ($counter.textContent = `${recipesFiltered.length} recettes `)
-      : ($counter.textContent = `${recipesFiltered.length} recette `);
+  filters.createFiltersWrapper();
 
-    //console.log('met a jour le compteur de recette');
-  }
-
-  displayMenuFilter(domElement, recipesList, search) {
-    domElement.innerHTML = '';
-
-    const filters = new FiltersWrapper(domElement, recipesList, search);
-
-    filters.createFiltersWrapper();
-
-    //console.log('met a jour le contenu des menu');
-  }
+  //console.log('met a jour le contenu des menu');
 }

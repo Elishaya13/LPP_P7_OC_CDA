@@ -1,6 +1,11 @@
+import { tagsList } from '../utils/SearchFilter.js';
+import { updateSearch, updateView } from '../utils/update.js';
+
 export class Filtertag {
-  constructor(value) {
+  constructor(value, data) {
     this.name = value;
+
+    this.data = data;
   }
 
   handleRemoveTag($tagElement) {
@@ -15,7 +20,17 @@ export class Filtertag {
         }
       }
     });
+
     $tagElement.remove();
+  }
+
+  updateTagsList(term) {
+    const indexToRemove = tagsList.indexOf(term);
+
+    if (indexToRemove !== -1) {
+      tagsList.splice(indexToRemove, 1);
+      console.log(`Elément "${term}" supprimé de tagsList`);
+    }
   }
 
   createTag() {
@@ -36,6 +51,13 @@ export class Filtertag {
 
     $icon.addEventListener('click', () => {
       this.handleRemoveTag($tagElement);
+      this.updateTagsList(this.name);
+
+      const input = document.getElementById('search');
+      const inputValue = input.value;
+      console.log('avant update', tagsList);
+      updateSearch(inputValue, tagsList);
+      updateView();
     });
     return $tagElement;
   }

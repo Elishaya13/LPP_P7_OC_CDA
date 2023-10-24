@@ -1,5 +1,4 @@
 import { FilterButton } from '../component/FilterButton.js';
-import { Display } from '../utils/Display.js';
 import { filterRecipeData } from '../utils/dataFilters.js';
 
 export class FiltersWrapper {

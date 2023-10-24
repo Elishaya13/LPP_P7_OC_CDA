@@ -1,6 +1,11 @@
 import { Header } from '../templates/Header.js';
 import { Main } from '../templates/Main.js';
-import { Display } from '../utils/Display.js';
+import {
+  displayCounter,
+  displayMenuFilter,
+  displayRecipes,
+} from '../utils/display.js';
+
 import { fetchData } from '../utils/fetch.js';
 import { recipesFiltered, SearchFilter } from '../utils/SearchFilter.js';
 import { tagsList } from '../utils/SearchFilter.js';
@@ -10,7 +15,6 @@ class Index {
     this.$headerWrapper = document.getElementById('header_wrapper');
     this.$mainContent = document.getElementById('main_content');
     this.recipesData = null;
-
     this.searchFilter = null;
   }
   async main() {
@@ -39,7 +43,6 @@ class Index {
     const $searchInput = document.getElementById('search');
 
     $searchInput.addEventListener('input', () => {
-      const display = new Display(this.searchFilter);
       const inputValue = $searchInput.value;
       let recipesToDisplay = [];
 
@@ -51,9 +54,9 @@ class Index {
         recipesToDisplay = recipesFiltered;
       }
 
-      display.displayRecipes($recipesWrapper, recipesToDisplay);
-      display.displayMenuFilter($filtersWrapper, recipesToDisplay);
-      display.displayCounter(recipesToDisplay);
+      displayRecipes($recipesWrapper, recipesToDisplay);
+      displayMenuFilter($filtersWrapper, recipesToDisplay);
+      displayCounter(recipesToDisplay);
     });
   }
 }

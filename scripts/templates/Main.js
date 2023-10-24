@@ -1,4 +1,4 @@
-import { Display } from '../utils/Display.js';
+import { displayMenuFilter, displayRecipes } from '../utils/display.js';
 
 export class Main {
   constructor(recipesData, searchFilter) {
@@ -16,15 +16,9 @@ export class Main {
     const $recipesWrapper = document.createElement('div');
     $recipesWrapper.classList.add('recipes__wrapper');
 
-    const display = new Display(this.recipesData, this.searchFilter);
+    displayMenuFilter($filtersWrapper, this.recipesData, this.searchFilter);
 
-    display.displayMenuFilter(
-      $filtersWrapper,
-      this.recipesData,
-      this.searchFilter
-    );
-
-    display.displayRecipes($recipesWrapper, this.recipesData);
+    displayRecipes($recipesWrapper, this.recipesData);
 
     return { $filtersWrapper, $tagsWrapper, $recipesWrapper };
   }

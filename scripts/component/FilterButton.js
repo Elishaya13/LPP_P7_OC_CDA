@@ -1,11 +1,6 @@
-import { Display } from '../utils/Display.js';
-//import { Search } from '../utils/Search.js';
-import {
-  SearchFilter,
-  recipesFiltered,
-  tagsList,
-  termValue,
-} from '../utils/SearchFilter.js';
+import { tagsList, termValue } from '../utils/SearchFilter.js';
+import { filterMenuWithTerms } from '../utils/dataFilters.js';
+import { updateSearch, updateView } from '../utils/update.js';
 import { Filtertag } from './FilterTag.js';
 
 export class FilterButton {
@@ -16,15 +11,32 @@ export class FilterButton {
     this.searchFilter = searchFilter;
   }
 
+  convertText(text) {
+    const correspondances = {
+      Ingrédients: 'ingredients',
+      Ustensils: 'ustensils',
+      Appareils: 'appliance',
+    };
+
+    // Vérifier si le texte passé correspond à une correspondance
+    if (correspondances[text]) {
+      // Si une correspondance existe
+      return correspondances[text];
+    } else {
+      // Si aucune correspondance n'a été trouvée
+      return text;
+    }
+  }
+
   handleClick(buttonElement) {
     // DOM elements
     const $dropdownContent = buttonElement.parentElement.querySelector(
       '.filter__dropdown-content'
     );
-    const $icoDropdown = buttonElement.querySelector('.fa');
+    const $iconDropdown = buttonElement.querySelector('.fa');
 
     // Toggle class on click
-    $icoDropdown.classList.toggle('fa-rotate-180');
+    $iconDropdown.classList.toggle('fa-rotate-180');
     $dropdownContent.classList.toggle('show');
 
     // Show or hide the content
@@ -37,43 +49,62 @@ export class FilterButton {
     $item.classList.toggle('selected');
     const name = $item.textContent.toLowerCase();
     const className = name.replace(/\s+/g, '');
+    const itemText = $item.textContent;
 
-    const isSelected = $item.classList.contains('selected');
+    const $tagsDomParent = document.querySelector('.tags__wrapper');
 
-    if (isSelected) {
-      const $closeIcon = document.createElement('i');
-      $closeIcon.classList.add('fa-solid', 'fa-circle-xmark');
-      $item.appendChild($closeIcon);
+    if (tagsList.includes(itemText)) {
+      const indexToRemove = tagsList.indexOf(itemText);
+      if (indexToRemove !== -1) {
+        tagsList.splice(indexToRemove, 1);
+      }
 
-      const $tagsDomParent = document.querySelector('.tags__wrapper');
-      const Tag = new Filtertag($item.textContent);
-      const $tagElement = Tag.createTag();
-      console.log('function filtre sur ' + $item.textContent);
-      $tagsDomParent.appendChild($tagElement);
-
-      tagsList.push($item.textContent);
-      const search = new SearchFilter(this.data);
-      search.search(termValue, tagsList);
-
-      //DOM
-      const $recipesWrapper = document.querySelector('.recipes__wrapper');
-      const $filtersWrapper = document.querySelector('.filters__wrapper');
-
-      const display = new Display(this.searchFilter);
-      display.displayRecipes($recipesWrapper, recipesFiltered);
-      display.displayMenuFilter($filtersWrapper, recipesFiltered);
-      display.displayCounter(recipesFiltered);
-    } else {
-      const $closeIcon = $item.querySelector('.fa-circle-xmark');
-      const $tagElement = document.querySelector(
+      let $itemToRemove = document.querySelector(
         `.tags__wrapper-item-${className}`
       );
 
-      if ($closeIcon) {
-        $closeIcon.remove();
-        $tagElement.remove();
-      }
+      updateSearch(termValue, tagsList);
+      updateView();
+
+      $itemToRemove.remove();
+    } else {
+      const Tag = new Filtertag(itemText, this.data);
+      const $tagElement = Tag.createTag();
+      $tagsDomParent.appendChild($tagElement);
+      tagsList.push(itemText);
     }
+
+    updateSearch(termValue, tagsList);
+    updateView();
+  }
+
+  createMenuList(dataMenu, parentElt, text) {
+    dataMenu.forEach((menu) => {
+      const $item = document.createElement('div');
+
+      const className = `search-item ${text}`;
+      $item.className = className;
+
+      $item.textContent = menu;
+      parentElt.appendChild($item);
+
+      const existingCloseIcon = $item.querySelector('.fa-circle-xmark');
+
+      $item.addEventListener('click', () => this.handleItemClick($item));
+
+      for (let tag of tagsList) {
+        if (tag === menu) {
+          console.log('tag trouvé', tag, menu);
+          $item.classList.add('selected');
+
+          if (!existingCloseIcon) {
+            const $closeIcon = document.createElement('i');
+            $closeIcon.classList.add('fa-solid', 'fa-circle-xmark');
+            $item.appendChild($closeIcon);
+          }
+        }
+      }
+    });
   }
 
   createFilterButton() {
@@ -93,25 +124,33 @@ export class FilterButton {
     const $dropdownContent = document.createElement('div');
     $dropdownContent.classList.add('filter__dropdown-content');
 
-    const $search = document.createElement('input');
-    $search.setAttribute('type', 'search');
-    $search.classList.add('filter__dropdown-search');
-    $dropdownContent.appendChild($search);
+    const $searchBar = document.createElement('input');
+    $searchBar.setAttribute('type', 'search');
+    $searchBar.classList.add('filter__dropdown-search');
+    $dropdownContent.appendChild($searchBar);
 
-    const filterData = this.dataFilter;
+    const modifiedText = this.convertText(this.text);
 
-    filterData.forEach((data) => {
-      const $item = document.createElement('div');
-      $item.classList.add('search-item');
-      $item.textContent = data;
-      $dropdownContent.appendChild($item);
+    this.createMenuList(this.dataFilter, $dropdownContent, modifiedText);
 
-      $item.addEventListener('click', () => this.handleItemClick($item));
+    $searchBar.addEventListener('input', () => {
+      const $searchItems = document.querySelectorAll(`.${modifiedText}`);
+      $searchItems.forEach(function (item) {
+        item.remove();
+      });
+
+      const dataFiltered = filterMenuWithTerms(
+        this.dataFilter,
+        $searchBar.value
+      );
+
+      this.createMenuList(dataFiltered, $dropdownContent, modifiedText);
     });
 
     $button.addEventListener('click', () => this.handleClick($button));
 
     $buttonContainer.appendChild($dropdownContent);
+    this.convertText(this.text);
 
     return $buttonContainer;
   }
