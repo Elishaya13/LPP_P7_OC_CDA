@@ -30,19 +30,28 @@ export function filterRecipeData(recipes) {
     return result;
   }
 
-  recipes.forEach((recipe) => {
-    recipe.ingredients.forEach((ingredientData) => {
-      uniqueIngredients.add(ingredientData.ingredient);
-    });
+  // Loop through recipes using a for loop.
+  for (let i = 0; i < recipes.length; i++) {
+    const recipe = recipes[i];
 
-    recipe.ustensils.forEach((ustensil) => {
+    // Loop through ingredients of each recipe.
+    for (let j = 0; j < recipe.ingredients.length; j++) {
+      const ingredientData = recipe.ingredients[j];
+      uniqueIngredients.add(ingredientData.ingredient);
+    }
+
+    // Loop through ustensils of each recipe.
+    for (let k = 0; k < recipe.ustensils.length; k++) {
+      const ustensil = recipe.ustensils[k];
       const ustensilCapitalize = capitalizeFirstLetter(ustensil);
       uniqueUstensils.add(ustensilCapitalize);
-    });
+    }
 
+    // Add the appliance to the unique appliances set.
     uniqueAppliances.add(recipe.appliance);
-  });
+  }
 
+  // Convert sets to arrays and return the result.
   return {
     ingredients: Array.from(uniqueIngredients),
     ustensils: Array.from(uniqueUstensils),
