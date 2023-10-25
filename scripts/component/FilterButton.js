@@ -178,16 +178,20 @@ export class FilterButton {
     this.createMenuList(this.dataFilter, $dropdownContent, modifiedTitle);
 
     // Add an input event listener to the search bar for dynamic filtering
-    $searchBar.addEventListener('input', () => {
+    $searchBar.addEventListener('input', (e) => {
+      const inputValue = e.target.value;
+      // Initialize a variable to store the sanitized value
+      let sanitizedValue = inputValue;
+      // Remove special characters that might be used for HTML injection
+      sanitizedValue = sanitizedValue.replace(/[<>'"&]/g, '');
+      e.target.value = sanitizedValue;
+
       const $searchItems = document.querySelectorAll(`.${modifiedTitle}`);
       $searchItems.forEach(function (item) {
         item.remove();
       });
 
-      const dataFiltered = filterMenuWithTerms(
-        this.dataFilter,
-        $searchBar.value
-      );
+      const dataFiltered = filterMenuWithTerms(this.dataFilter, sanitizedValue);
 
       this.createMenuList(dataFiltered, $dropdownContent, modifiedTitle);
     });

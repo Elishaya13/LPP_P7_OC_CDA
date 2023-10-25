@@ -57,8 +57,17 @@ class Index {
 
     const $searchInput = document.getElementById('search');
 
-    $searchInput.addEventListener('input', () => {
-      const inputValue = $searchInput.value;
+    $searchInput.addEventListener('input', (e) => {
+      const inputValue = e.target.value;
+
+      let sanitizedValue = inputValue;
+
+      // Remove special characters that might be used for HTML injection
+      sanitizedValue = sanitizedValue.replace(/[<>'"&]/g, '');
+
+      // Apply the sanitized value back to the input
+      e.target.value = sanitizedValue;
+
       let recipesToDisplay = [];
 
       if (inputValue.length >= 3) {
