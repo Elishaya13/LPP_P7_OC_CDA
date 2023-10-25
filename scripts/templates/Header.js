@@ -1,6 +1,14 @@
+/**
+ * Represents the header of the application.
+ */
 export class Header {
   constructor() {}
 
+  /**
+   * Generates the HTML content for the application header.
+   *
+   * @returns {string} The HTML content of the header.
+   */
   createHeader() {
     const $header = `
   

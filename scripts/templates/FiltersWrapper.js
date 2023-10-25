@@ -1,34 +1,39 @@
 import { FilterButton } from '../component/FilterButton.js';
 import { filterRecipeData } from '../utils/dataFilters.js';
 
+/**
+ * A class representing a container for filtering buttons and a recipe counter.
+ */
 export class FiltersWrapper {
-  constructor(domParent, recipesData, searchFilter) {
+  /**
+   * Create a new FiltersWrapper.
+   *
+   * @param {Element} domParent - The DOM element where the filters will be created.
+   * @param {Array} recipesData - The list of recipes data used for filtering.
+   */
+  constructor(domParent, recipesData) {
     this.$parent = domParent;
     this.recipesData = recipesData;
-    this.searchFilter = searchFilter;
   }
 
+  /**
+   * Create the filter buttons and recipe counter within the FiltersWrapper.
+   */
   createFiltersWrapper() {
     const filteredData = filterRecipeData(this.recipesData);
     const numberOfRecipes = this.recipesData.length;
 
     const ingredientsButton = new FilterButton(
       'Ingrédients',
-      filteredData.ingredients,
-      this.recipesData,
-      this.searchFilter
+      filteredData.ingredients
     );
     const appliancesButton = new FilterButton(
       'Appareils',
-      filteredData.appliances,
-      this.recipesData,
-      this.searchFilter
+      filteredData.appliances
     );
     const ustensilsButton = new FilterButton(
       'Ustensiles',
-      filteredData.ustensils,
-      this.recipesData,
-      this.searchFilter
+      filteredData.ustensils
     );
 
     const $ingredientsFilter = ingredientsButton.createFilterButton();

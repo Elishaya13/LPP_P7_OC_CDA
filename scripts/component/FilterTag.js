@@ -1,11 +1,17 @@
 import { tagsList } from '../utils/SearchFilter.js';
 import { updateSearch, updateView } from '../utils/update.js';
 
+/**
+ * Represents a filter tag for ingredients, utensils, or appliances.
+ */
 export class Filtertag {
-  constructor(value, data) {
+  /**
+   * Creates a new filter tag.
+   *
+   * @param {string} value - The name or value of the filter tag.
+   */
+  constructor(value) {
     this.name = value;
-
-    this.data = data;
   }
 
   handleRemoveTag($tagElement) {

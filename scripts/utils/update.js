@@ -1,37 +1,31 @@
 import { SearchFilter, recipesFiltered } from './SearchFilter.js';
-import {
-  displayCounter,
-  displayMenuFilter,
-  displayRecipes,
-} from './display.js';
+import { displayCounter, displayFilters, displayRecipes } from './display.js';
 import { fetchData } from './fetch.js';
 
 const dataRecipes = await fetchData();
 
 /**
- * Updates the view with filtered recipes and display information.
- * @param {SearchFilter} search - The search filter instance.
+ * Update the view by displaying recipes, filters, and a counter based on the filtered data.
  */
 export function updateView() {
   const $recipesWrapper = document.querySelector('.recipes__wrapper');
   const $filtersWrapper = document.querySelector('.filters__wrapper');
 
+  // Display recipes, filters, and a counter based on filtered data
   displayRecipes($recipesWrapper, recipesFiltered);
-  displayMenuFilter($filtersWrapper, recipesFiltered);
+  displayFilters($filtersWrapper, recipesFiltered);
   displayCounter(recipesFiltered);
-  // const display = new Display();
-  // display.displayRecipes($recipesWrapper, recipesFiltered);
-  // display.displayMenuFilter($filtersWrapper, recipesFiltered);
-  // display.displayCounter(recipesFiltered);
 }
 
 /**
- * Updates the search results based on user input and selected tags.
- * @param {Array} data - The data source for searching.
- * @param {string} inputValue - The user input for searching.
- * @param {Array} tags - An array of selected tags.
+ * Update the search by applying search terms and tags to filter the data.
+ *
+ * @param {string} inputValue - The search term entered by the user.
+ * @param {Array} tags - An array of tags to filter the data.
  */
 export function updateSearch(inputValue, tags) {
   const searchFilter = new SearchFilter(dataRecipes);
+
+  // Apply search terms and tags to filter the data
   searchFilter.search(inputValue, tags);
 }
