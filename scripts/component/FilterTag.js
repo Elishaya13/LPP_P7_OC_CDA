@@ -40,10 +40,10 @@ export class Filtertag {
 
   createTag() {
     const name = this.name.toLowerCase();
-    const buttonClass = name.replace(/\s+/g, '');
+    const tagClass = name.replace(/\s+/g, '');
 
     const $tagElement = document.createElement('div');
-    $tagElement.classList.add(`tags__wrapper-item-${buttonClass}`);
+    $tagElement.classList.add(`tags__wrapper-item-${tagClass}`);
 
     const $button = document.createElement('button');
     $button.textContent = this.name;
