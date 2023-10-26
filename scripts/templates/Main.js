@@ -1,32 +1,33 @@
-import { fetchData } from '../utils/fetch.js';
-import { RecipeCard } from '../component/RecipeCard.js';
-import { FiltersWrapper } from './FiltersWrapper.js';
+import { displayFilters, displayRecipes } from '../utils/display.js';
 
+/**
+ * A class representing the main content of the application.
+ */
 export class Main {
-  constructor() {}
+  constructor(recipesData) {
+    this.recipesData = recipesData;
+  }
 
+  /**
+   * Create the main content of the application, including filters, tags, and recipes.
+   *
+   * @async
+   * @returns {Object} - An object containing DOM elements for filters, tags, and recipes.
+   */
   async createMain() {
-    const $filterWrapper = document.createElement('div');
-    $filterWrapper.classList.add('filter__wrapper');
+    const $filtersWrapper = document.createElement('div');
+    $filtersWrapper.classList.add('filters__wrapper');
+
+    const $tagsWrapper = document.createElement('div');
+    $tagsWrapper.classList.add('tags__wrapper');
 
     const $recipesWrapper = document.createElement('div');
     $recipesWrapper.classList.add('recipes__wrapper');
 
-    try {
-      const recipesData = await fetchData();
+    displayFilters($filtersWrapper, this.recipesData);
 
-      const Filters = new FiltersWrapper($filterWrapper, recipesData);
-      Filters.createFiltersWrapper();
+    displayRecipes($recipesWrapper, this.recipesData);
 
-      recipesData.forEach((recipe) => {
-        const Recipe = new RecipeCard(recipe);
-        const recipeCardHtml = Recipe.createRecipeCard();
-        $recipesWrapper.innerHTML += recipeCardHtml;
-      });
-    } catch (error) {
-      console.error('An error occurred while fetching data:', error);
-    }
-
-    return { $filterWrapper, $recipesWrapper };
+    return { $filtersWrapper, $tagsWrapper, $recipesWrapper };
   }
 }

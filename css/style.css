@@ -58,6 +58,7 @@ body {
   height: 30%;
   display: flex;
   align-items: center;
+  flex-direction: column;
   padding-top: 1.8rem;
 }
 .header__searchbar form .input__wrapper {
@@ -107,26 +108,40 @@ body {
 .header__searchbar form .input__wrapper button:hover {
   background: #ffd15b url("../assets/images/search_icon_black.svg") no-repeat center;
 }
+.header__searchbar .no-result {
+  width: 100%;
+  height: 6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.header__searchbar .no-result p {
+  font-size: 1.313rem;
+  color: #ffd15b;
+  font-weight: bold;
+  padding: 1rem;
+}
 
 /* MAIN */
 #main_content {
   background-color: #ededed;
+  /* TAGS */
   /* RECIPES */
 }
-#main_content .filter__wrapper {
+#main_content .filters__wrapper {
   position: relative;
   display: flex;
   justify-content: flex-start;
   gap: 4.8rem;
-  padding: 1.5rem 0 2.8rem 0;
+  padding: 1.5rem 0 1.8rem 0;
   max-width: 86%;
   margin: auto;
 }
-#main_content .filter__wrapper .filter__dropdown {
+#main_content .filters__wrapper .filter__dropdown {
   position: relative;
   display: inline-block;
 }
-#main_content .filter__wrapper .filter__dropdown-btn {
+#main_content .filters__wrapper .filter__dropdown-btn {
   display: flex;
   align-items: center;
   gap: 3rem;
@@ -140,55 +155,89 @@ body {
   font-weight: 600;
   font-size: 1rem;
 }
-#main_content .filter__wrapper .filter__dropdown-search {
+#main_content .filters__wrapper .filter__dropdown-search {
   box-sizing: border-box;
   background-image: url("../assets/images/searchicon.png");
   background-position: right 12px center;
   background-repeat: no-repeat;
   font-size: 16px;
-  padding: 14px 20px 12px 15px;
+  padding: 14px 29px 12px 15px;
   margin: 1rem 0 1rem 0;
   border: 1px solid #c6c6c6;
   border-radius: 2px;
   width: 90%;
-  position: relative;
+  position: sticky;
+  top: 0;
   left: 5%;
 }
-#main_content .filter__wrapper .filter__dropdown-search:focus {
+#main_content .filters__wrapper .filter__dropdown-search:focus {
   outline: 1px solid #7a7a7a;
 }
-#main_content .filter__wrapper .filter__dropdown-content {
+#main_content .filters__wrapper .filter__dropdown-content {
   display: none;
   position: absolute;
   background-color: #fff;
   width: 100%;
   max-height: 19.68rem;
-  overflow: hidden;
+  overflow-y: auto;
   left: 0;
   margin-top: -10px;
   z-index: 1;
   border-radius: 0 0 0.69rem 0.69rem;
 }
-#main_content .filter__wrapper .filter__dropdown-content .search-item {
+#main_content .filters__wrapper .filter__dropdown-content .search-item {
   padding: 6px 20px 6px 15px;
   font-family: "Manrope", sans-serif;
   font-size: 0.875rem;
   cursor: pointer;
 }
-#main_content .filter__wrapper .filter__dropdown-content .search-item:hover {
+#main_content .filters__wrapper .filter__dropdown-content .search-item:hover {
   background-color: #ffd15b;
 }
-#main_content .filter__wrapper .filter__counter {
+#main_content .filters__wrapper .filter__dropdown-content .selected {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffd15b;
+  font-weight: bold;
+}
+#main_content .filters__wrapper .filter__counter {
   height: 56px;
   display: flex;
   align-items: center;
   position: absolute;
   right: 0;
 }
-#main_content .filter__wrapper .filter__counter__span {
+#main_content .filters__wrapper .filter__counter__span {
   font-size: 1.313rem;
   font-family: "Anton", sans-serif;
   font-weight: 400;
+}
+#main_content .tags__wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  max-width: 86%;
+  height: auto;
+  margin: auto;
+  padding-bottom: 2rem;
+}
+#main_content .tags__wrapper div button {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: auto;
+  height: 3.5rem;
+  padding: 1rem;
+  background-color: #ffd15b;
+  border-radius: 0.69rem;
+  font-family: "Manrope", sans-serif;
+  font-size: 1rem;
+  border: none;
+}
+#main_content .tags__wrapper div button i {
+  cursor: pointer;
 }
 #main_content .recipes__wrapper {
   display: flex;
