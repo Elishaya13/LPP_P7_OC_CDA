@@ -13,38 +13,37 @@ export class SearchFilter {
    * @returns {Array} - An array of recipes that match the search term.
    */
   filterWithTerms(recipesList, searchTerm) {
-    let recipesFound = [];
+    searchTerm = searchTerm.toLowerCase();
+    let addedRecipes = new Set();
 
-    // Check if the search term is too short (less than 3 characters), and reset the results.
-    if (searchTerm.length < 3) {
-      recipesFound = [];
-    }
-
-    for (let recipe of recipesList) {
-      // Convert the recipe's name and description to lowercase for case-insensitive matching.
+    // Filter recipes based on the search term in name and description.
+    recipesList.filter((recipe) => {
       const nameLowerCase = recipe.name.toLowerCase();
       const descriptionLowerCase = recipe.description.toLowerCase();
 
-      // Check if the name or description contains the 'searchTerm'.
       if (
         nameLowerCase.includes(searchTerm) ||
         descriptionLowerCase.includes(searchTerm)
       ) {
-        recipesFound.push(recipe);
-      } else {
-        // If no match is found in name or description, loop through each ingredient in the recipe.
-        for (let ingredient of recipe.ingredients) {
-          const ingredientLowerCase = ingredient.ingredient.toLowerCase();
-          if (ingredientLowerCase.includes(searchTerm)) {
-            // If a matching ingredient is found, add the recipe to 'recipesFound'.
-            recipesFound.push(recipe);
-            break; // Break the loop to prevent duplicate additions for the same recipe.
-          }
-        }
+        addedRecipes.add(recipe);
       }
-    }
+    });
 
-    // Update 'recipesWithTerms' variable with the filtered results.
+    // Filter recipes based on the search term in ingredients.
+    recipesList.filter((recipe) => {
+      const foundInIngredients = recipe.ingredients.some((ingredient) => {
+        const ingredientToLowerCase = ingredient.ingredient.toLowerCase();
+        return ingredientToLowerCase.includes(searchTerm);
+      });
+
+      if (foundInIngredients) {
+        addedRecipes.add(recipe);
+      }
+    });
+
+    let recipesFound = Array.from(addedRecipes);
+
+    // Update 'recipesWithTerms'  with the filtered results.
     this.recipesWithTerms = recipesFound;
 
     return recipesFound;
@@ -59,9 +58,10 @@ export class SearchFilter {
    */
   filterWithTags(recipesList, searchTags) {
     let recipesFound = [];
+    let recipesToFilter = recipesList;
 
     if (searchTags.length > 0) {
-      for (let recipe of recipesList) {
+      for (let recipe of recipesToFilter) {
         let allTagsFound = true; // Indicator to check if all tags are present in the recipe
 
         for (let searchTag of searchTags) {
@@ -134,7 +134,7 @@ export class SearchFilter {
       this.recipesWithTag.length === 0 &&
       this.recipesWithTerms.length === 0
     ) {
-      console.log('Return the entire recipe list');
+      // console.log('Return the entire recipe list');
       if (searchTerms.length === 0) {
         return this.fullRecipesData;
       } else {
@@ -144,7 +144,7 @@ export class SearchFilter {
 
     // If both tag and term filters have recipes
     if (this.recipesWithTag.length > 0 && this.recipesWithTerms.length > 0) {
-      console.log('Return the list of recipes that match both filters');
+      // console.log('Return the list of recipes that match both filters');
       let recipesWithMatchingID = [];
 
       for (let termRecipe of this.recipesWithTerms) {
@@ -160,13 +160,13 @@ export class SearchFilter {
 
     // If only the tag filter has recipes
     if (this.recipesWithTag.length > 0 && this.recipesWithTerms.length === 0) {
-      console.log('Return the list of recipes that match only the tag filter');
+      // console.log('Return the list of recipes that match only the tag filter');
       return filteredWithTags;
     }
 
     // If only the term filter has recipes
     if (this.recipesWithTag.length === 0 && this.recipesWithTerms.length > 0) {
-      console.log('Return the list of recipes that match only the term filter');
+      // console.log('Return the list of recipes that match only the term filter');
       return filteredByTerms;
     }
   }

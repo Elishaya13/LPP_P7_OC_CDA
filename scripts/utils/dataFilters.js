@@ -20,36 +20,25 @@ export function filterRecipeData(recipes) {
    * @returns {string} A new string with the first letter capitalized.
    */
   function capitalizeFirstLetter(string) {
-    // Get the first character of the string and convert it to uppercase.
     const firstLetterCapitalized = string.charAt(0).toUpperCase();
-    // Get the rest of the string from the second character.
     const restOfString = string.slice(1);
-    // Combine the first character in uppercase with the rest of the string.
     const result = firstLetterCapitalized + restOfString;
-    // Return the new string with the first letter capitalized.
     return result;
   }
 
-  // Loop through recipes using a for loop.
-  for (let i = 0; i < recipes.length; i++) {
-    const recipe = recipes[i];
-
-    // Loop through ingredients of each recipe.
-    for (let j = 0; j < recipe.ingredients.length; j++) {
-      const ingredientData = recipe.ingredients[j];
+  recipes.forEach((recipe) => {
+    recipe.ingredients.forEach((ingredientData) => {
       uniqueIngredients.add(ingredientData.ingredient);
-    }
+    });
 
-    // Loop through ustensils of each recipe.
-    for (let k = 0; k < recipe.ustensils.length; k++) {
-      const ustensil = recipe.ustensils[k];
+    recipe.ustensils.forEach((ustensil) => {
       const ustensilCapitalize = capitalizeFirstLetter(ustensil);
       uniqueUstensils.add(ustensilCapitalize);
-    }
+    });
 
     // Add the appliance to the unique appliances set.
     uniqueAppliances.add(recipe.appliance);
-  }
+  });
 
   // Convert sets to arrays and return the result.
   return {
@@ -67,14 +56,14 @@ export function filterRecipeData(recipes) {
  * @returns {string[]} An array of menu items that match the search term.
  */
 export function filterMenuWithTerms(dataMenu, searchTerm) {
-  let dataFound = [];
+  const searchTermToLowerCase = searchTerm.toLowerCase();
 
-  for (let data of dataMenu) {
-    const searchTermToLowerCase = searchTerm.toLowerCase();
+  const filteredMenuData = dataMenu.filter((data) => {
     const dataToLowerCase = data.toLowerCase();
-    if (dataToLowerCase.includes(searchTermToLowerCase)) {
-      dataFound.push(data);
-    }
-  }
-  return dataFound;
+    const includesSearchTerm = dataToLowerCase.includes(searchTermToLowerCase);
+
+    return includesSearchTerm;
+  });
+
+  return filteredMenuData;
 }
