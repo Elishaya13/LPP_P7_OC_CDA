@@ -1,4 +1,4 @@
-import { tagsList, termValue } from '../utils/SearchFilter.js';
+import { tagsList, termValue } from '../store/store.js';
 import { filterMenuWithTerms } from '../utils/dataFilters.js';
 import { updateSearch, updateView } from '../utils/update.js';
 import { Filtertag } from './FilterTag.js';

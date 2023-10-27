@@ -1,6 +1,5 @@
 import { RecipeCard } from '../component/RecipeCard.js';
 import { FiltersWrapper } from '../templates/FiltersWrapper.js';
-import { SearchFilter } from './SearchFilter.js';
 
 /**
  * Display recipes in a specified DOM element.

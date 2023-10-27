@@ -1,15 +1,8 @@
-import { displayNoResult, removeNoResultMessage } from './display.js';
-
-export let recipesFiltered = []; //Le tableau des objets filtrés
-export let tagsList = []; // le tableau des tags selectionné
-export let termValue = '';
-let recipesWithTag = [];
-let recipesWithTerms = [];
-
 export class SearchFilter {
-  //Initialise la classe avec toutes les data (50 recettes)
   constructor(dataRecipes) {
     this.fullRecipesData = dataRecipes;
+    this.recipesWithTag = [];
+    this.recipesWithTerms = [];
   }
 
   /**
@@ -22,7 +15,10 @@ export class SearchFilter {
   filterWithTerms(recipesList, searchTerm) {
     let recipesFound = [];
 
-    removeNoResultMessage();
+    // Check if the search term is too short (less than 3 characters), and reset the results.
+    if (searchTerm.length < 3) {
+      recipesFound = [];
+    }
 
     for (let recipe of recipesList) {
       // Convert the recipe's name and description to lowercase for case-insensitive matching.
@@ -47,18 +43,9 @@ export class SearchFilter {
         }
       }
     }
-    // Check if the search term is too short (less than 3 characters), and reset the results.
-    if (searchTerm.length < 3) {
-      recipesFound = [];
-      recipesFiltered = [];
-    }
-    if (recipesFound.length === 0 && searchTerm.length >= 3) {
-      // No recipes found and the search term has at least 3 characters
-      displayNoResult(searchTerm);
-    }
 
-    // Update the global 'recipesWithTerms' variable with the filtered results.
-    recipesWithTerms = recipesFound;
+    // Update 'recipesWithTerms' variable with the filtered results.
+    this.recipesWithTerms = recipesFound;
 
     return recipesFound;
   }
@@ -72,10 +59,9 @@ export class SearchFilter {
    */
   filterWithTags(recipesList, searchTags) {
     let recipesFound = [];
-    let recipesToFilter = recipesList;
 
     if (searchTags.length > 0) {
-      for (let recipe of recipesToFilter) {
+      for (let recipe of recipesList) {
         let allTagsFound = true; // Indicator to check if all tags are present in the recipe
 
         for (let searchTag of searchTags) {
@@ -116,75 +102,72 @@ export class SearchFilter {
       }
     }
 
-    recipesWithTag = recipesFound;
+    this.recipesWithTag = recipesFound;
 
     return recipesFound;
   }
 
   /**
    * Search for recipes based on search terms and tags.
-   * @param {string[]} searchTerms - The search terms to filter recipes by.
+   * @param {string} searchTerms - The search terms to filter recipes by.
    * @param {string[]} searchTags - The tags to filter recipes by.
+   * @returns {Array} An array of recipes matching the provided search criteria.
    */
   search(searchTerms, searchTags) {
-    termValue = searchTerms;
-
-    const fullRecipes = this.fullRecipesData;
-
-    let recipesToDisplay = [];
-
     // Filter recipes based on tags
-    const filteredWithTags = this.filterWithTags(
+    let filteredWithTags = this.filterWithTags(
       this.fullRecipesData,
       searchTags
     );
 
+    let filteredByTerms = [];
     // Filter recipes based on search terms
-    const filteredByTerms = this.filterWithTerms(
-      this.fullRecipesData,
-      termValue
-    );
+    if (searchTerms.length >= 3) {
+      filteredByTerms = this.filterWithTerms(this.fullRecipesData, searchTerms);
+    } else if (filteredByTerms.length === 0) {
+      this.recipesWithTerms = [];
+    }
 
     // If both tag and term filters are empty, return the full list
-    if (recipesWithTag.length === 0 && recipesWithTerms.length === 0) {
+    // Or if searchTerms exist and no recipes are found, return an empty array
+    if (
+      this.recipesWithTag.length === 0 &&
+      this.recipesWithTerms.length === 0
+    ) {
       console.log('Return the entire recipe list');
-      recipesToDisplay = fullRecipes;
+      if (searchTerms.length === 0) {
+        return this.fullRecipesData;
+      } else {
+        return [];
+      }
     }
 
     // If both tag and term filters have recipes
-    if (recipesWithTag.length > 0 && recipesWithTerms.length > 0) {
+    if (this.recipesWithTag.length > 0 && this.recipesWithTerms.length > 0) {
       console.log('Return the list of recipes that match both filters');
-      recipesFiltered = [];
-      recipesWithTag = filteredWithTags;
-
       let recipesWithMatchingID = [];
 
-      for (let termRecipe of recipesWithTerms) {
-        for (let tagRecipe of recipesWithTag) {
+      for (let termRecipe of this.recipesWithTerms) {
+        for (let tagRecipe of this.recipesWithTag) {
           if (tagRecipe.id === termRecipe.id) {
             recipesWithMatchingID.push(tagRecipe);
             break;
           }
         }
       }
-
-      recipesToDisplay = recipesWithMatchingID;
+      return recipesWithMatchingID;
     }
 
     // If only the tag filter has recipes
-    if (recipesWithTag.length > 0 && recipesWithTerms.length === 0) {
+    if (this.recipesWithTag.length > 0 && this.recipesWithTerms.length === 0) {
       console.log('Return the list of recipes that match only the tag filter');
-      recipesFiltered = [];
-      recipesWithTag = this.filterWithTags(this.fullRecipesData, tagsList);
-      recipesToDisplay = recipesWithTag;
+      return filteredWithTags;
     }
 
     // If only the term filter has recipes
-    if (recipesWithTag.length === 0 && recipesWithTerms.length > 0) {
+    if (this.recipesWithTag.length === 0 && this.recipesWithTerms.length > 0) {
       console.log('Return the list of recipes that match only the term filter');
-      recipesToDisplay = filteredByTerms;
+      return filteredByTerms;
     }
-
-    recipesFiltered = recipesToDisplay;
   }
 }

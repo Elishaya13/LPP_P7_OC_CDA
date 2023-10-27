@@ -1,4 +1,4 @@
-import { tagsList } from '../utils/SearchFilter.js';
+import { tagsList } from '../store/store.js';
 import { updateSearch, updateView } from '../utils/update.js';
 
 /**

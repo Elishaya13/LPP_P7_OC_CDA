@@ -1,14 +1,8 @@
 import { Header } from '../templates/Header.js';
 import { Main } from '../templates/Main.js';
-import {
-  displayCounter,
-  displayFilters,
-  displayRecipes,
-} from '../utils/display.js';
-
 import { fetchData } from '../utils/fetch.js';
-import { recipesFiltered, SearchFilter } from '../utils/SearchFilter.js';
-import { tagsList } from '../utils/SearchFilter.js';
+import { tagsList } from '../store/store.js';
+import { updateSearch, updateView } from '../utils/update.js';
 
 /**
  * The main class for the application.
@@ -18,7 +12,6 @@ class Index {
     this.$headerWrapper = document.getElementById('header_wrapper');
     this.$mainContent = document.getElementById('main_content');
     this.recipesData = null;
-    this.searchFilter = null;
   }
 
   /**
@@ -38,7 +31,6 @@ class Index {
         console.log('Fetch data Error : ', error);
       }
     }
-    this.searchFilter = new SearchFilter(this.recipesData);
     this.addMainContent();
   }
 
@@ -68,19 +60,13 @@ class Index {
       // Apply the sanitized value back to the input
       e.target.value = sanitizedValue;
 
-      let recipesToDisplay = [];
-
       if (inputValue.length >= 3) {
-        this.searchFilter.search(inputValue, tagsList);
-        recipesToDisplay = recipesFiltered;
+        updateSearch(inputValue, tagsList);
       } else {
-        this.searchFilter.search('', tagsList);
-        recipesToDisplay = recipesFiltered;
+        updateSearch('', tagsList);
       }
 
-      displayRecipes($recipesWrapper, recipesToDisplay);
-      displayFilters($filtersWrapper, recipesToDisplay);
-      displayCounter(recipesToDisplay);
+      updateView();
     });
   }
 }
