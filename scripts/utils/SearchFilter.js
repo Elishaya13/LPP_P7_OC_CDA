@@ -150,14 +150,22 @@ export class SearchFilter {
     }
 
     // If both tag and term filters have recipes
-    for (let termRecipe of this.recipesWithTerms) {
-      for (let tagRecipe of this.recipesWithTag) {
-        if (tagRecipe.id === termRecipe.id) {
-          recipesWithMatchingID.push(tagRecipe);
-          break;
+    // Use the `reduce` method to find recipes with matching IDs
+    let recipesWithMatchingID = this.recipesWithTag.reduce(
+      (accumulator, tagRecipe) => {
+        // Check if any recipe in `recipesWithTerms` has the same ID as the current `tagRecipe`
+        if (
+          this.recipesWithTerms.some(
+            (termRecipe) => termRecipe.id === tagRecipe.id
+          )
+        ) {
+          accumulator.push(tagRecipe);
         }
-      }
-    }
+        return acc;
+      },
+      []
+    ); // Start with an empty array as the initial accumulator
+
     return recipesWithMatchingID;
   }
 }
