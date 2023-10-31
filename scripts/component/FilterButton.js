@@ -1,4 +1,4 @@
-import { tagsList, termValue } from '../store/store.js';
+import { tagsList } from '../store/store.js';
 import { filterMenuWithTerms } from '../utils/dataFilters.js';
 import { updateSearch, updateView } from '../utils/update.js';
 import { Filtertag } from './FilterTag.js';
@@ -74,6 +74,7 @@ export class FilterButton {
 
     // Get the DOM parent element for displaying selected tags.
     const $tagsDomParent = document.querySelector('.tags__wrapper');
+    const inputValue = document.getElementById('search').value;
 
     if (tagsList.includes(itemText)) {
       // If the item's text is already in the list of selected tags, remove it.
@@ -89,7 +90,7 @@ export class FilterButton {
       $itemToRemove.remove();
 
       // Update the search filter and refresh the view with the updated tags.
-      updateSearch(termValue, tagsList);
+      updateSearch(inputValue, tagsList);
       updateView();
     } else {
       // If the item's text is not in the list of selected tags, add it.
@@ -100,7 +101,7 @@ export class FilterButton {
     }
 
     // Update the search filter and refresh the view with the updated tags.
-    updateSearch(termValue, tagsList);
+    updateSearch(inputValue, tagsList);
     updateView();
   }
 

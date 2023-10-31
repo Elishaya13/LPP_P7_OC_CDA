@@ -120,13 +120,11 @@ export class SearchFilter {
       searchTags
     );
 
-    let filteredByTerms = [];
-    // Filter recipes based on search terms
-    if (searchTerms.length >= 3) {
-      filteredByTerms = this.filterWithTerms(this.fullRecipesData, searchTerms);
-    } else if (filteredByTerms.length === 0) {
-      this.recipesWithTerms = [];
-    }
+    // Filter recipes based on terms
+    let filteredByTerms = this.filterWithTerms(
+      this.fullRecipesData,
+      searchTerms
+    );
 
     // If both tag and term filters are empty, return the full list
     // Or if searchTerms exist and no recipes are found, return an empty array
@@ -134,7 +132,6 @@ export class SearchFilter {
       this.recipesWithTag.length === 0 &&
       this.recipesWithTerms.length === 0
     ) {
-      // console.log('Return the entire recipe list');
       if (searchTerms.length === 0) {
         return this.fullRecipesData;
       } else {
@@ -142,32 +139,25 @@ export class SearchFilter {
       }
     }
 
-    // If both tag and term filters have recipes
-    if (this.recipesWithTag.length > 0 && this.recipesWithTerms.length > 0) {
-      // console.log('Return the list of recipes that match both filters');
-      let recipesWithMatchingID = [];
-
-      for (let termRecipe of this.recipesWithTerms) {
-        for (let tagRecipe of this.recipesWithTag) {
-          if (tagRecipe.id === termRecipe.id) {
-            recipesWithMatchingID.push(tagRecipe);
-            break;
-          }
-        }
-      }
-      return recipesWithMatchingID;
-    }
-
     // If only the tag filter has recipes
     if (this.recipesWithTag.length > 0 && this.recipesWithTerms.length === 0) {
-      // console.log('Return the list of recipes that match only the tag filter');
       return filteredWithTags;
     }
 
     // If only the term filter has recipes
     if (this.recipesWithTag.length === 0 && this.recipesWithTerms.length > 0) {
-      // console.log('Return the list of recipes that match only the term filter');
       return filteredByTerms;
     }
+
+    // If both tag and term filters have recipes
+    for (let termRecipe of this.recipesWithTerms) {
+      for (let tagRecipe of this.recipesWithTag) {
+        if (tagRecipe.id === termRecipe.id) {
+          recipesWithMatchingID.push(tagRecipe);
+          break;
+        }
+      }
+    }
+    return recipesWithMatchingID;
   }
 }
