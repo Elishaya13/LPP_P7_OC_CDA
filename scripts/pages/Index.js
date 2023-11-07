@@ -47,6 +47,7 @@ class Index {
     this.$mainContent.appendChild($tagsWrapper);
     this.$mainContent.appendChild($recipesWrapper);
 
+    const $buttonSearch = document.querySelector('button');
     const $searchInput = document.getElementById('search');
 
     $searchInput.addEventListener('input', (e) => {
@@ -67,6 +68,10 @@ class Index {
       }
 
       updateView();
+    });
+
+    $buttonSearch.addEventListener('click', (e) => {
+      e.preventDefault();
     });
   }
 }
