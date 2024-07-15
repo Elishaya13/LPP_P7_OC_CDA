@@ -6,12 +6,17 @@
 <br>
 
 - Intégration d'un maquette
-- Développer un algorithme de recherche
+- Développer un algorithme de recherche utilisant deux approches : native et fonctionnelle
+- Créer une fiche d'investigation de fonctionnalité 
+- Créer les algorigrammes 
+- Adopter les bonnes pratiques du Green Code
 
   <br>
   <h2>Project Screenshots:</h2>
   <br>
-  <img src="https://i.ibb.co/QNzFF4g/lespetitsplats.png" alt="project-screenshot" width="400" height="400/">
+  <img src="https://pictures.angiepons.fr/images/pf_lpp2G.png" alt="project-screenshot" width="400" height="400/">
+  <img src="https://pictures.angiepons.fr/images/pf_lpp4G.png" alt="project-screenshot" width="400" height="400/">
+  <img src="https://pictures.angiepons.fr/images/pf_lpp5G.png" alt="project-screenshot" width="400" height="400/">
 
     <br>
     <br>
